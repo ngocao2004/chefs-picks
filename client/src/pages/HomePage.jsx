@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/style.css";
 
 const featureCards = [
@@ -43,17 +44,19 @@ const HomePage = () => {
 
         <div className="header-actions">
           <nav className="home-nav-links">
-            <a className="active" href="#">
+            <Link className="active" to="/">
               Home
-            </a>
-            <a href="#">Today&apos;s Picks</a>
-            <a href="#">Surprise Me</a>
-            <a href="#">Nearby</a>
-            <a href="#">History</a>
-            <a href="#">Favorites</a>
+            </Link>
+            <Link to="/todays-picks">Today&apos;s Picks</Link>
+            <Link to="/surprise-me">Surprise Me</Link>
+            <Link to="/nearby">Nearby</Link>
+            <Link to="/history">History</Link>
+            <Link to="/favorites">Favorites</Link>
           </nav>
 
-          <button className="login-btn">Login</button>
+          <Link to="/login">
+            <button className="login-btn">Login</button>
+          </Link>
         </div>
       </header>
 
