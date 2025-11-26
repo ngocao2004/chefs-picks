@@ -12,6 +12,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "lucide-react": "^0.554.0"
   }
 }
