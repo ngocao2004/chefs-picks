@@ -27,6 +27,8 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 });
 
 module.exports = model('User', userSchema);
