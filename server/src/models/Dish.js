@@ -5,7 +5,7 @@ const dishSchema = new mongoose.Schema(
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
-      required: true,
+      required: [true, "Restaurant ID is required"],
       index: true,
     },
     categoryId: {
@@ -16,30 +16,32 @@ const dishSchema = new mongoose.Schema(
     },
     name: {
       type: String,
-      required: true,
+      required: [true, "Dish name is required"],
       trim: true,
-      maxlength: 150,
+      maxlength: [150, "Name cannot exceed 150 characters"],
       index: true,
     },
     description: {
       type: String,
       default: "",
       trim: true,
+      maxlength: [1000, "Description cannot exceed 1000 characters"],
     },
     price: {
       type: Number,
-      required: true,
-      min: 0,
+      required: [true, "Price is required"],
+      min: [0, "Price cannot be negative"],
     },
     image: {
       type: String,
       default: "",
+      trim: true,
     },
     rating: {
       type: Number,
       default: 0,
-      min: 0,
-      max: 5,
+      min: [0, "Rating cannot be less than 0"],
+      max: [5, "Rating cannot exceed 5"],
     },
     ingredients: [
       {
@@ -55,7 +57,7 @@ const dishSchema = new mongoose.Schema(
     favoriteCount: {
       type: Number,
       default: 0,
-      min: 0,
+      min: [0, "Favorite count cannot be negative"],
       index: true,
     },
   },
@@ -70,5 +72,17 @@ dishSchema.index({ restaurantId: 1, isAvailable: 1 });
 dishSchema.index({ categoryId: 1, price: 1 });
 dishSchema.index({ isAvailable: 1, favoriteCount: -1 }); // Popular available dishes
 dishSchema.index({ price: 1 }); // Price sorting
+
+// Virtual để format price
+dishSchema.virtual("formattedPrice").get(function () {
+  return this.price.toLocaleString("vi-VN") + "đ";
+});
+
+// Middleware để đảm bảo rating luôn hợp lệ
+dishSchema.pre("save", function (next) {
+  if (this.rating < 0) this.rating = 0;
+  if (this.rating > 5) this.rating = 5;
+  next();
+});
 
 module.exports = mongoose.model("Dish", dishSchema);
