@@ -5,6 +5,9 @@ import Menu from "../pages/Menu";
 import React from "react";
 import RegisterPage from "../pages/RegisterPage";
 import DishDetail from "../pages/DishDetail";
+import FavoriteFood from "../pages/FavoriteFoodPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -13,8 +16,11 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/menu/:id" element={<DishDetail />} />
+        <Route path="/favorites" element={<FavoriteFood />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

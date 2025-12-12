@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Search, Heart, Home, Loader2, AlertCircle } from 'lucide-react';
 import { API_BASE_URL } from '../config/api-config';
@@ -8,6 +9,7 @@ function Menu() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [cuisine, setCuisine] = useState('');
@@ -147,10 +149,14 @@ function Menu() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-orange-500 mb-4">
-            <Home size={20} />
-            <span className="font-medium">ホーム</span>
-          </div>
+         
+            <div onClick={() => navigate('/')} className="cursor-pointer inline-block mb-4">
+              <div className="flex items-center gap-2 text-orange-500 mb-4 w-30">  
+                <Home size={20} />
+                <span className="font-medium">ホーム</span>
+              </div>
+            </div>
+         
           
           {/* Search and Filters */}
           <div className="flex flex-wrap gap-3">
