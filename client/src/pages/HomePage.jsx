@@ -1,27 +1,27 @@
-import { Link } from "react-router-dom";
+import Header from "../components/layout/Header";
 import "../styles/style.css";
 
 const featureCards = [
   {
     id: "surprise",
     icon: "🎉",
-    title: "Surprise Me",
-    description: "Not sure what to eat? Get a single bold pick from AI.",
-    cta: "Try once",
+    title: "サプライズ",
+    description: "何を食べるか迷っていますか？AIがおすすめの一品を選びます。",
+    cta: "試してみる",
   },
   {
     id: "map",
     icon: "📍",
-    title: "Nearby Lunch Map",
-    description: "See restaurants you can walk to right now.",
-    cta: "Open map",
+    title: "近くのランチマップ",
+    description: "今すぐ歩いて行けるレストランを確認できます。",
+    cta: "マップを開く",
   },
   {
     id: "plan",
     icon: "🗓️",
-    title: "Weekly Lunch Plan",
-    description: "Auto-build a balanced plan for your weekdays.",
-    cta: "See plan",
+    title: "週間ランチプラン",
+    description: "平日のバランスの取れたプランを自動で作成します。",
+    cta: "プランを見る",
   },
 ];
 
@@ -32,49 +32,25 @@ const highlightMeals = [
 ];
 
 const HomePage = () => {
+
   return (
     <div className="home-page">
-      <header className="home-header">
-        <div className="brand">
-          <div>
-            <span className="brand-name">Chef&apos;s Recommendation Menu</span>
-            <span className="beta-pill">Beta</span>
-          </div>
-        </div>
-
-        <div className="header-actions">
-          <nav className="home-nav-links">
-            <Link className="active" to="/">
-              Home
-            </Link>
-            <Link to="/todays-picks">Today&apos;s Picks</Link>
-            <Link to="/surprise-me">Surprise Me</Link>
-            <Link to="/nearby">Nearby</Link>
-            <Link to="/history">History</Link>
-            <Link to="/favorites">Favorites</Link>
-          </nav>
-
-          <Link to="/login">
-            <button className="login-btn">Login</button>
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <main className="home-content">
         <section className="hero-section">
           <div className="hero-text">
-            <p className="hero-label">Today&apos;s Recommended Lunch</p>
+            <p className="hero-label">今日のおすすめランチ</p>
             <p className="hero-subtitle">
-              Choose faster with suggestions tailored to your taste, weather, and
-              budget.
+              あなたの好み、天気、予算に合わせた提案で、より早く選べます。
             </p>
             <div className="hero-actions">
-              <button className="primary-btn">View Recommendations</button>
-              <button className="ghost-btn">Surprise Me</button>
+              <button className="primary-btn">おすすめを見る</button>
+              <button className="ghost-btn">サプライズ</button>
             </div>
           </div>
           <div className="hero-preview">
-            <span>Preview area for recommended dishes / images</span>
+            <span>おすすめ料理のプレビューエリア / 画像</span>
           </div>
         </section>
 
@@ -92,7 +68,7 @@ const HomePage = () => {
         </section>
 
         <section className="highlights">
-          <h2>Highlights Today</h2>
+          <h2>今日のハイライト</h2>
           <ul>
             {highlightMeals.map((meal) => (
               <li key={meal.id} className="highlight-item">
@@ -103,7 +79,7 @@ const HomePage = () => {
                     <span className="meal-price">{meal.price}</span>
                   </div>
                 </div>
-                <button className="detail-btn">Details</button>
+                <button className="detail-btn">詳細</button>
               </li>
             ))}
           </ul>
