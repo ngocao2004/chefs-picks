@@ -9,9 +9,12 @@ const authRoutes = require("./routes/auth-routes");
 const favoriteRoutes = require("./routes/favorite-routes");
 const dishRoutes = require("./routes/dish-router");
 const categoryRoutes = require("./routes/category-routes");
-
+const suggestionRouter = require("./routes/suggestions-routes");
+const historyRoutes = require("./routes/historyRoutes");
+const omakaseRoutes = require("./routes/omakase-routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 
 app.use(cors());
 app.use(express.json());
@@ -23,7 +26,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/dishes", dishRoutes);
 app.use("/api/categories", categoryRoutes);
-
+app.use("/api/suggestions", suggestionRouter);
+app.use("/api/omakase", omakaseRoutes); 
+app.use("/api/history", historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello! Server is running.");

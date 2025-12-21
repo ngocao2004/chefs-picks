@@ -18,6 +18,43 @@
   font-weight: bold;
   letter-spacing: 1px;    /* nếu muốn chữ cách đều như hình */
 }
+.title-tech {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.title span {
+  background: linear-gradient(90deg, #f59e0b, #fb923c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+
+
+.category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.category-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.category-btn.active {
+  background: #ff6f00;
+  color: #fff;
+  border-color: #ff6f00;
+}
 
 h1 {
   color: #ff6f00;
@@ -40,10 +77,33 @@ h1 {
 
 .cards-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 40px;
   margin-bottom: 30px;
+  max-width: 900px;
+}
+.category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px auto;
+  justify-content: center;
+  max-width: 900px;
+}
+
+.category-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #cccccc;
+  background: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+.category-btn.active {
+  background: #111;
+  color: white;
+  border-color: #111;
 }
 
 .card {
@@ -54,6 +114,7 @@ h1 {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .card:hover {
@@ -94,6 +155,22 @@ h1 {
   font-size: 0.9rem;
   color: #ffb400;
 }
+.btn-home {
+  position: absolute;   /* Cố định vị trí */
+  top: 20px;            /* Cách mép trên 20px */
+  left: 20px;           /* Cách mép trái 20px */
+  padding: 10px 15px;
+  background-color: #ff6f00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;        /* Luôn nổi trên các phần khác */
+}
+
+.btn-home:hover {
+  background-color: #e65c00;
+}
 
 .btn-refresh {
   background-color: #ff6f00;
@@ -105,49 +182,5 @@ h1 {
   cursor: pointer;.btn-refresh {
   display: flex;           /* thêm */
   align-items: center;     /* thêm */
-  justify-content: center; /* thêm */
-  gap: 8px;                /* thêm: khoảng cách giữa icon và text */
-}
-
-  transition: background-color 0.3s ease;
-}
-
-.btn-refresh:hover:not(:disabled) {
-  background-color: #e65a00;
-}
-
-.btn-refresh:disabled {
-  background-color: #ffa733;
-  cursor: not-allowed;
-}
-
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-  margin: 20px 0;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-  .cards-container {
-    justify-content: center;
   }
-}
-
-@media (max-width: 768px) {
-  .cards-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card {
-    width: 90%;
-  }
-}
+} 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, AlertCircle, Loader2, Star, MapPin, Utensils, ShoppingCart, Check, User } from 'lucide-react';
 import { API_BASE_URL } from '../config/api-config';
+import Header from '../components/layout/Header';
 
 const fallbackImage =
   'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop';
@@ -133,17 +134,55 @@ const DishDetail = () => {
     }, 2000);
   };
 
-  const handleOrder = () => {
-    if (!dish) return;
-    
-    // Thêm vào giỏ hàng nếu chưa có
-    if (!isInCart) {
-      addToCart(dish);
-    }
-    
-    // Chuyển đến trang giỏ hàng (hoặc trang thanh toán)
-    navigate('/cart');
+  const handleOrder = async () => {
+  if (!dish) return;
+
+  // 1. Kiểm tra userId
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert("ログインしてください (Vui lòng đăng nhập)");
+    return;
+  }
+
+  // 2. Lấy ID nhà hàng an toàn
+  // Nếu đã populate, ID nằm trong ._id. Nếu chưa, nó chính là dish.restaurantId
+  const rId = dish.restaurantId?._id || dish.restaurantId;
+
+  // LOG để bạn kiểm tra trực tiếp trong Console khi bấm nút
+  console.log("Dữ liệu Dish gửi đi:", dish);
+  console.log("ID nhà hàng trích xuất được:", rId);
+
+  if (!rId) {
+    alert("エラー: レストランIDが見つかりません (Lỗi: Không tìm thấy ID nhà hàng của món ăn này!)");
+    return;
+  }
+
+  const orderData = {
+    userId: userId,
+    dishId: dish._id,
+    restaurantId: rId, // Đảm bảo truyền chuỗi ID, không phải Object
+    price: dish.price
   };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/dishes/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("注文が完了し、履歴に保存されました！");
+      navigate('/history');
+    } else {
+      alert("Server error: " + result.message);
+    }
+  } catch (error) {
+    console.error("Lỗi kết nối:", error);
+    alert("サーバーに接続できません (Không thể kết nối tới server)");
+  }
+};
 
   const renderContent = () => {
     if (loading) {
@@ -402,7 +441,9 @@ const DishDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <Header />
+      
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
@@ -413,7 +454,7 @@ const DishDetail = () => {
           </button>
           <span className="text-sm text-gray-400">/ 料理詳細</span>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         {renderContent()}
