@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2, AlertCircle, CheckCircle, ArrowLeft, Mail } from "lucide-react";
+import {
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  ArrowLeft,
+  Mail,
+} from "lucide-react";
 import "../styles/style.css";
 import { API_BASE_URL } from "../config/api-config";
 
@@ -10,6 +16,7 @@ const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,8 +55,19 @@ const ForgotPasswordPage = () => {
 
       if (data.success) {
         setSuccess(true);
-        // Lưu email vào localStorage để dùng ở trang reset
         localStorage.setItem("resetEmail", email);
+
+        setCountdown(5);
+        const interval = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              navigate("/reset-password");
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       } else {
         setError("予期しないエラーが発生しました");
       }
@@ -63,18 +81,35 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className="login-container">
-      {/* Background */}
       <div className="background-blur"></div>
 
       <div className="login-box">
-        <div className="flex items-center gap-2 mb-4">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "16px",
+          }}
+        >
           <button
             onClick={() => navigate(-1)}
             className="text-gray-600 hover:text-orange-600 transition-colors"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "4px",
+              display: "flex",
+              alignItems: "center",
+              flexShrink: 0,
+            }}
           >
             <ArrowLeft size={20} />
           </button>
-          <h2>パスワードを忘れた場合</h2>
+          <h2 style={{ margin: 0, fontSize: "20px", lineHeight: "1.2" }}>
+            パスワードを忘れた場合
+          </h2>
         </div>
 
         <p className="subtitle">
@@ -112,19 +147,30 @@ const ForgotPasswordPage = () => {
               padding: "12px",
               borderRadius: "8px",
               marginBottom: "16px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
               fontSize: "14px",
             }}
           >
-            <CheckCircle size={18} />
-            <div>
-              <p className="font-semibold">メールを送信しました</p>
-              <p className="text-sm mt-1">
-                メールアドレス {email} にリセットコードを送信しました。
-                メールを確認して、次のステップに進んでください。
-              </p>
+            <div style={{ display: "flex", alignItems: "start", gap: "8px" }}>
+              <CheckCircle
+                size={18}
+                style={{ marginTop: "2px", flexShrink: 0 }}
+              />
+              <div>
+                <p style={{ margin: "0 0 8px 0", fontWeight: "600" }}>
+                  メールを送信しました
+                </p>
+                <p style={{ margin: "0 0 8px 0", fontSize: "13px" }}>
+                  メールアドレス <strong>{email}</strong>{" "}
+                  にリセットコードを送信しました。
+                </p>
+                <p style={{ margin: 0, fontSize: "13px" }}>
+                  {countdown > 0 ? (
+                    <span>{countdown}秒後にリセットページに移動します...</span>
+                  ) : (
+                    <span>リセットページに移動中...</span>
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         )}
@@ -197,12 +243,15 @@ const ForgotPasswordPage = () => {
                 width: "100%",
               }}
             >
-              <span>リセットコードを入力</span>
+              <span>今すぐリセットコードを入力</span>
             </button>
           </div>
         )}
 
-        <div className="forgot" style={{ textAlign: "center", marginTop: "16px" }}>
+        <div
+          className="forgot"
+          style={{ textAlign: "center", marginTop: "16px" }}
+        >
           <Link to="/login">ログインページに戻る</Link>
         </div>
       </div>
@@ -211,5 +260,3 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
-
-
