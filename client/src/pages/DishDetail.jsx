@@ -102,7 +102,7 @@ const DishDetail = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${API_BASE_URL}/dishes/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/dishes/${id}`);
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || '料理の取得に失敗しました');
@@ -166,7 +166,7 @@ const DishDetail = () => {
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}/dishes/order`, {
+    const response = await fetch(`${API_BASE_URL}/api/dishes/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
