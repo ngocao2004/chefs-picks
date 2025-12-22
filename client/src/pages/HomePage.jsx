@@ -42,7 +42,7 @@ const HomePage = () => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`${API_BASE_URL}/api/dishes/popular?limit=3`);
+        const response = await fetch(`${API_BASE_URL}/dishes/popular?limit=3`);
         
         if (!response.ok) {
           throw new Error("人気料理の取得に失敗しました");
