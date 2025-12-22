@@ -43,7 +43,7 @@ function Menu() {
 
       try {
         // Lấy danh sách favorites từ API
-        const response = await fetch(`${API_BASE_URL}/favorites`, {
+        const response = await fetch(`${API_BASE_URL}/api/favorites`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ function Menu() {
       setLoading(true);
       setError(null);
 
-      let url = `${API_BASE_URL}/dishes`;
+      let url = `${API_BASE_URL}/api/dishes`;
       const params = new URLSearchParams();
       
       // Thêm pagination params cho endpoint chính
@@ -94,7 +94,7 @@ function Menu() {
 
       // Xử lý search
       if (searchTerm.trim()) {
-        url = `${API_BASE_URL}/dishes/search`;
+        url = `${API_BASE_URL}/api/dishes/search`;
         params.append('q', searchTerm);
       }
       // Xử lý filter by category
@@ -102,7 +102,7 @@ function Menu() {
         // Lấy categoryId từ tên category
         const category = categories.find(cat => cat.name === cuisine);
         if (category) {
-          url = `${API_BASE_URL}/dishes/category/${category._id}`;
+          url = `${API_BASE_URL}/api/dishes/category/${category._id}`;
         }
       }
       // Xử lý filter by price range
@@ -120,7 +120,7 @@ function Menu() {
       }
       // Xử lý popular
       else if (sortBy === 'popular') {
-        url = `${API_BASE_URL}/dishes/popular`;
+        url = `${API_BASE_URL}/api/dishes/popular`;
         params.append('limit', 50);
       } else {
         // Endpoint chính hỗ trợ pagination
@@ -187,7 +187,7 @@ function Menu() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/categories`);
+        const response = await fetch(`${API_BASE_URL}/api/categories`);
         if (response.ok) {
           const data = await response.json();
           setCategories(Array.isArray(data) ? data : (data.categories || []));
@@ -214,7 +214,7 @@ function Menu() {
     try {
       if (isFavorite) {
         // Xóa khỏi yêu thích
-        const response = await fetch(`${API_BASE_URL}/favorites/${dishId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/favorites/${dishId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -233,7 +233,7 @@ function Menu() {
         }
       } else {
         // Thêm vào yêu thích
-        const response = await fetch(`${API_BASE_URL}/favorites`, {
+        const response = await fetch(`${API_BASE_URL}/api/favorites`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
