@@ -4,6 +4,7 @@ import { Loader2, AlertCircle } from "lucide-react";
 import Header from "../components/layout/Header";
 import { API_BASE_URL } from "../config/api-config";
 import "../styles/style.css";
+import { Link } from "react-router-dom";
 
 const featureCards = [
   {
@@ -80,7 +81,8 @@ const HomePage = () => {
               あなたの好み、天気、予算に合わせた提案で、より早く選べます。
             </p>
             <div className="hero-actions">
-              <button className="primary-btn">おすすめを見る</button>
+              <Link to="/suggest"> 
+              <button className="primary-btn">おすすめを見る</button> </Link>
               <button className="ghost-btn">サプライズ</button>
             </div>
           </div>

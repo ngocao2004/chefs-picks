@@ -3,79 +3,141 @@ import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import "../styles/SuggestPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRandom } from "@fortawesome/free-solid-svg-icons"; 
+import { faRandom } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import "../styles/FoodCard.css";
+import FoodCard from "../components/common/FoodCard";
 
-const API_URL = "http://localhost:5000/api/suggestions"; // API backend
+
+const API_SUGGEST = "http://localhost:5000/api/omakase";
+const API_CATEGORIES = "http://localhost:5000/api/categories";
 
 const SuggestPage = () => {
+  const navigate = useNavigate();
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  /* ================== FETCH CATEGORIES ================== */
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(API_CATEGORIES);
+      setCategories(res.data);
+    } catch (err) {
+      console.error("❌ Fetch categories error", err);
+    }
+  };
+
+  /* ================== TOGGLE CATEGORY ================== */
+  const toggleCategory = (categoryId) => {
+    setSelectedCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
+  /* ================== FETCH SUGGESTIONS ================== */
   const fetchSuggestions = async () => {
     setLoading(true);
     setError("");
-    try {
-      const res = await axios.get(API_URL);
 
-      if (res.data && res.data.data && res.data.data.length > 0) {
-        setSuggestions(res.data.data);
-      } else {
-        setSuggestions([]);
-        setError("No suggestions found.");
-      }
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const res = await axios.post(
+        API_SUGGEST,
+        {
+          categories: selectedCategories, // ✅ array of categoryId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSuggestions(res.data);
     } catch (err) {
       console.error(err);
-      setError("Failed to load suggestions.");
+      setError("Không thể lấy gợi ý món ăn");
+      setSuggestions([]);
     } finally {
       setLoading(false);
     }
   };
 
+  /* ================== EFFECTS ================== */
   useEffect(() => {
-    fetchSuggestions();
+    fetchCategories();
   }, []);
 
+  useEffect(() => {
+    fetchSuggestions();
+  }, [selectedCategories]);
+
+  /* ================== RENDER ================== */
   return (
     <div className="suggest-page">
-      <div className="page-header">
-        <h2>Shikiai AI CONCIERGE</h2>
-      </div>
+      <button className="btn-home" onClick={() => navigate("/")}>
+        🏠 Back to Home
+      </button>
+
+     <h2 className="title-tech">
+     Shikiai <span>AI</span> CONCIERGE
+     </h2>
+
       <h1>Suggest Page</h1>
 
+      {/* CATEGORY FILTER */}
+      <div className="category-bar">
+        {categories.map((cat) => (
+          <button
+            key={cat._id}
+            className={`category-btn ${
+              selectedCategories.includes(cat._id) ? "active" : ""
+            }`}
+            onClick={() => toggleCategory(cat._id)}
+          >
+            {cat.name}
+          </button>
+        ))}
+      </div>
+
+      {/* LOADING */}
       {loading && (
         <div className="loading">
-          <ClipLoader color="#ff6f00" size={50} />
-          <p>Loading ...</p>
+          <ClipLoader size={50} />
+          <p>Loading...</p>
         </div>
       )}
 
+      {/* ERROR */}
       {error && !loading && <p className="error">{error}</p>}
 
-      {!loading && !error && suggestions.length > 0 && (
-        <div className="cards-container">
-          {suggestions.map((item, idx) => (
-            <div className="card" key={idx}>
-              <div className="card-image">
-                <img src={item.image} alt={item.name} />
-              </div>
-              <div className="card-content">
-                <h3>{item.name}</h3>
-                <p className="restaurant">{item.restaurant}</p>
-                <p className="price">{item.price}</p>
-                <p className="rating">⭐ {item.rating}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* CARDS */}
+      {!loading && suggestions.length > 0 && (
+       <div
+       className={`cards-container ${
+       suggestions.length === 1 ? "one-card" : "three-cards"
+       }`}>
+      {suggestions.slice(0, 3).map((item) => (
+      <FoodCard key={item._id} food={item} />
+       ))}
+      </div>
       )}
 
+      {/* RANDOM BUTTON */}
       <button
         className="btn-refresh"
-        onClick={fetchSuggestions}
+        onClick={() => setSelectedCategories([])}
         disabled={loading}
       >
-        <FontAwesomeIcon icon={faRandom} style={{ marginRight: "8px" }} />
+        <FontAwesomeIcon icon={faRandom} />
         Random Pick
       </button>
     </div>

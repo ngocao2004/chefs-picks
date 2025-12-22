@@ -1,34 +1,31 @@
 @import "tailwindcss";
 /* Fullscreen container */
 .login-container {
-height: 100%;
-width: 100%;
-flex:1;
- 
+  height: 100%;
+  width: 100%;
+  flex: 1;
+
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
- 
 }
 .register-container {
-height: 100%;
-width: 100%;
-flex:1;
- 
+  height: 100%;
+  width: 100%;
+  flex: 1;
+
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
- 
 }
 
 /* Background image + blur */
 .background-blur {
-    
   position: absolute;
   inset: 0;
-  background-image: url("/images/food.jpg"); 
+  background-image: url("/images/food.jpg");
   background-size: cover;
   background-position: center;
   filter: blur(6px) brightness(70%);
@@ -45,9 +42,9 @@ flex:1;
   background: white;
   margin: auto;
   margin-top: 60px;
-  padding: 35px;
+  padding: 30px;
   border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .login-box h2 {
@@ -108,7 +105,7 @@ input:focus {
   background: #e26510;
 }
 .btn-signup {
-  background: #f97316; 
+  background: #f97316;
   border: none;
   padding: 10px 20px;
   color: white;
@@ -119,9 +116,8 @@ input:focus {
 }
 
 .btn-signup:hover {
-  background:  #e26510;
+  background: #e26510;
 }
-
 
 .btn-create {
   background: white;
@@ -419,5 +415,47 @@ input:focus {
 
   .home-content {
     padding: 32px 24px 48px;
+  }
+
+  .password-strength {
+    margin-top: -8px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .password-strength-bar {
+    flex: 1;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .password-strength-bar-fill {
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+
+  /* Countdown animation */
+  @keyframes countdown {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+
+  .countdown-text {
+    animation: countdown 1s ease-in-out infinite alternate;
+    font-weight: 600;
+  }
+
+  /* Code input styling */
+  input[type="text"][maxlength="6"] {
+    font-family: "Courier New", monospace;
   }
 }
