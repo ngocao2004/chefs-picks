@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate } from "react-router-dom";
 import { Loader2, AlertCircle } from "lucide-react";
 import Header from "../components/layout/header";
 import { API_BASE_URL } from "../config/api-config";
@@ -31,6 +32,13 @@ const featureCards = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleFeatureClick = (cardId) => {
+    if (cardId === "map") {
+      navigate("/map");
+    }
+  }
   const [highlightMeals, setHighlightMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -98,7 +106,13 @@ const HomePage = () => {
               <div>
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
-                <button className="ghost-btn small">{card.cta}</button>
+                <button
+                  className="ghost-btn small"
+                  onClick={() => handleFeatureClick(card.id)}
+                  type="button"
+                >
+                  {card.cta}
+                </button>
               </div>
             </article>
           ))}
