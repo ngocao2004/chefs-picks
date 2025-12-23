@@ -1,6 +1,6 @@
 import Header from "../components/layout/Header";
 import "../styles/style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const featureCards = [
   {
@@ -33,6 +33,13 @@ const highlightMeals = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleFeatureClick = (cardId) => {
+    if (cardId === "map") {
+      navigate("/map");
+    }
+  };
 
   return (
     <div className="home-page">
@@ -63,7 +70,13 @@ const HomePage = () => {
               <div>
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
-                <button className="ghost-btn small">{card.cta}</button>
+                <button
+                  className="ghost-btn small"
+                  onClick={() => handleFeatureClick(card.id)}
+                  type="button"
+                >
+                  {card.cta}
+                </button>
               </div>
             </article>
           ))}
