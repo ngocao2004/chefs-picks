@@ -7,10 +7,10 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import "../styles/FoodCard.css";
 import FoodCard from "../components/common/FoodCard";
+import { API_BASE_URL } from '../config/api-config';
 
-
-const API_SUGGEST = "http://localhost:5000/api/omakase";
-const API_CATEGORIES = "http://localhost:5000/api/categories";
+const API_SUGGEST = `${API_BASE_URL}/omakase`;
+const API_CATEGORIES = `${API_BASE_URL}/categories`;
 
 const SuggestPage = () => {
   const navigate = useNavigate();
@@ -145,3 +145,4 @@ const SuggestPage = () => {
 };
 
 export default SuggestPage;
+
