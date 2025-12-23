@@ -39,8 +39,7 @@ export default function FavoriteFood() {
         setエラー(null);
         try {
             // APIクエリにページネーションパラメータを追加
-            const response = await axios.get(`${API_BASE_URL}?page=${page}&limit=${limit}`, apiConfig);
-
+            const response = await axios.get(`${API_BASE_URL}/api/favorites`, apiConfig);
             setお気に入りリスト(response.data.data.favorites); 
             set現在ページ(response.data.data.pagination.currentPage);
             set全ページ数(response.data.data.pagination.totalPages);
