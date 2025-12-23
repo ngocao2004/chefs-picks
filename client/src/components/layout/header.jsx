@@ -81,7 +81,7 @@ const Header = () => {
           <Link className={isActive("/surprise-me") ? "active" : ""} to="/surprise-me">
             サプライズ
           </Link>
-          <Link className={isActive("/nearby") ? "active" : ""} to="/nearby">
+          <Link className={isActive("/map") ? "active" : ""} to="/map">
             近く
           </Link>
           <Link className={isActive("/history") ? "active" : ""} to="/history">

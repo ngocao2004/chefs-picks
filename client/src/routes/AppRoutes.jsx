@@ -10,6 +10,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import SuggestPage from "../pages/SuggestPage";
 import MealHistory from "../pages/MealHistory";
+import LunchConciergeMapPage from "../pages/LunchConciergeMapPage";
 import LunchSchedulePage from "../pages/LunchSchedulePage";
 
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route path="/favorites" element={<FavoriteFood />} />
         <Route path="/suggest" element={<SuggestPage />} />
         <Route path="/history" element={<MealHistory />} />
+        <Route path="/map" element={<LunchConciergeMapPage />} />
         <Route path="/lunch-schedule" element={<LunchSchedulePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
