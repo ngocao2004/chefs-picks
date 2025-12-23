@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, AlertCircle, Loader2, Star, MapPin, Utensils, ShoppingCart, Check, User } from 'lucide-react';
-import { API_BASE_URL } from '../config/api-config';
-import Header from '../components/layout/Header';
+import Header from '../components/layout/header';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const fallbackImage =
   'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop';
@@ -101,7 +102,7 @@ const DishDetail = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`${API_BASE_URL}/dishes/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/dishes/${id}`);
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || '料理の取得に失敗しました');
@@ -165,7 +166,7 @@ const DishDetail = () => {
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}/dishes/order`, {
+    const response = await fetch(`${API_BASE_URL}/api/dishes/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
