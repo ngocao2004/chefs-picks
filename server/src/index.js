@@ -12,6 +12,7 @@ const categoryRoutes = require("./routes/category-routes");
 const suggestionRouter = require("./routes/suggestions-routes");
 const historyRoutes = require("./routes/historyRoutes");
 const omakaseRoutes = require("./routes/omakase-routes");
+const lunchScheduleRoutes = require("./routes/lunch-schedule-routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -29,6 +30,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/suggestions", suggestionRouter);
 app.use("/api/omakase", omakaseRoutes); 
 app.use("/api/history", historyRoutes);
+app.use("/api/lunch-schedule", lunchScheduleRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello! Server is running.");
