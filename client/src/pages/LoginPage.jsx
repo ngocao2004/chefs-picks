@@ -60,9 +60,15 @@ const LoginPage = () => {
         // Lưu token và user info vào localStorage
         localStorage.setItem("authToken", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
-        // Lưu userId để các trang khác (ví dụ `DishDetail`) có thể kiểm tra
-        const uid = data.data.user && (data.data.user._id || data.data.user.id || data.data.user);
-        if (uid) localStorage.setItem("userId", typeof uid === 'string' ? uid : JSON.stringify(uid));
+        // Lưu userId (luôn là một chuỗi ID thuần) để các trang khác có thể kiểm tra
+        const extractId = (u) => {
+          if (!u) return null;
+          if (typeof u === 'string') return u;
+          if (typeof u === 'object') return u._id || u.id || null;
+          return null;
+        };
+        const uid = extractId(data.data.user);
+        if (uid) localStorage.setItem("userId", String(uid));
         console.log("Logged in user:", data.data.user);
 
         // Redirect về trang chuyển hướng nếu có ?redirect=..., ngược lại về homepage

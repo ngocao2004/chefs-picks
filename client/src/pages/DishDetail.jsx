@@ -187,12 +187,19 @@ const DishDetail = () => {
       body: JSON.stringify(orderData)
     });
 
-    const result = await response.json();
+    let result = null;
+    try {
+      result = await response.json();
+    } catch (e) {
+      // ignore JSON parse errors
+    }
+
     if (response.ok) {
       alert("注文が完了し、履歴に保存されました！");
       navigate('/history');
     } else {
-      alert("Server error: " + result.message);
+      console.error('Order failed response:', response.status, result);
+      alert("Server error: " + (result?.message || response.statusText || 'Unknown error'));
     }
   } catch (error) {
     console.error("Lỗi kết nối:", error);
