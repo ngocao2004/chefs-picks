@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/FoodCard.css";
 import FoodCard from "../components/common/FoodCard";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL + "/api/omakase";
-const API_SUGGEST = `${API_BASE_URL}/suggest`;
+const API_BASE_URL = import.meta.env.VITE_API_URL + "/api";
+const API_SUGGEST = `${API_BASE_URL}/omakase`;
 const API_CATEGORIES = `${API_BASE_URL}/categories`;
 
 const SuggestPage = () => {
