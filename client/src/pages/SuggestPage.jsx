@@ -7,10 +7,9 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import "../styles/FoodCard.css";
 import FoodCard from "../components/common/FoodCard";
-import { API_BASE_URL } from '../config/api-config';
+import { API_BASE_URL } from "../config/api-config";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL + "/api/omakase";
-const API_SUGGEST = `${API_BASE_URL}/suggest`;
+const API_SUGGEST = `${API_BASE_URL}/omakase`;
 const API_CATEGORIES = `${API_BASE_URL}/categories`;
 
 const SuggestPage = () => {
@@ -88,9 +87,9 @@ const SuggestPage = () => {
         🏠 Back to Home
       </button>
 
-     <h2 className="title-tech">
-     Shikiai <span>AI</span> CONCIERGE
-     </h2>
+      <h2 className="title-tech">
+        Shikiai <span>AI</span> CONCIERGE
+      </h2>
 
       <h1>Suggest Page</h1>
 
@@ -122,14 +121,15 @@ const SuggestPage = () => {
 
       {/* CARDS */}
       {!loading && suggestions.length > 0 && (
-       <div
-       className={`cards-container ${
-       suggestions.length === 1 ? "one-card" : "three-cards"
-       }`}>
-      {suggestions.slice(0, 3).map((item) => (
-      <FoodCard key={item._id} food={item} />
-       ))}
-      </div>
+        <div
+          className={`cards-container ${
+            suggestions.length === 1 ? "one-card" : "three-cards"
+          }`}
+        >
+          {suggestions.slice(0, 3).map((item) => (
+            <FoodCard key={item._id} food={item} />
+          ))}
+        </div>
       )}
 
       {/* RANDOM BUTTON */}
@@ -146,4 +146,3 @@ const SuggestPage = () => {
 };
 
 export default SuggestPage;
-
