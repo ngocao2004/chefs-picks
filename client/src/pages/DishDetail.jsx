@@ -333,7 +333,7 @@ const DishDetail = () => {
             </div>
           </div>
 
-          Nút thêm giỏ hàng và đặt hàng - Ở cuối
+
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 mt-auto">
               {/* <button
                 onClick={handleAddToCart}
@@ -369,7 +369,7 @@ const DishDetail = () => {
                 disabled={!dish.isAvailable}
                 className={`flex-1 px-6 py-4 rounded-xl font-semibold text-white transition-all ${
                   dish.isAvailable
-                    ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg'
+                    ? 'bg-orange-600 hover:bg-blue-700 hover:shadow-lg'
                     : 'bg-gray-400 cursor-not-allowed'
                 }`}
               >
