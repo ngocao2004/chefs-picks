@@ -37,9 +37,15 @@ app.use(
 // the browser preflight if requested.
 // Use a valid path pattern for Express/`path-to-regexp` by matching all paths.
 // Using '/*' avoids a PathError on some platform versions.
-app.options("/*", (req, res, next) => {
-  if (req.headers["access-control-request-private-network"]) {
-    res.setHeader("Access-Control-Allow-Private-Network", "true");
+// Global OPTIONS handler to respond to preflight requests and allow
+// Access-Control-Allow-Private-Network when requested. Using a middleware
+// instead of `app.options('/*', ...)` avoids path-to-regexp errors on some
+// platform/node module versions.
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    if (req.headers["access-control-request-private-network"]) {
+      res.setHeader("Access-Control-Allow-Private-Network", "true");
+    }
   }
   next();
 });
