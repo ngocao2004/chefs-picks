@@ -369,8 +369,8 @@ const DishDetail = () => {
                 disabled={!dish.isAvailable}
                 className={`flex-1 px-6 py-4 rounded-xl font-semibold text-white transition-all ${
                   dish.isAvailable
-                    ? 'bg-orange-600 hover:bg-blue-700 hover:shadow-lg'
-                    : 'bg-orange-300 cursor-not-allowed'
+                    ? 'bg-orange-600 hover:bg-orange-300 hover:shadow-lg'
+                    : 'bg-orange-500 cursor-not-allowed'
                 }`}
               >
                 注文する
