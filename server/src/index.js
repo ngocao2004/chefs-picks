@@ -24,6 +24,10 @@ const CLIENT_URL = (process.env.CLIENT_URL || "http://localhost:5173")
   .map((s) => s.trim())
   .filter(Boolean);
 
+// Log allowed origins at startup so we can verify Render/host picked up env
+// (will appear in Render service logs)
+console.log("Allowed CORS origins:", CLIENT_URL);
+
 app.use(
   cors({
     origin: CLIENT_URL,
