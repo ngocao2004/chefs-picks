@@ -35,7 +35,9 @@ app.use(
 // Handle Private Network preflight requests (when a public origin tries to reach
 // a private address). Most deployments shouldn't need this, but respond to
 // the browser preflight if requested.
-app.options("*", (req, res, next) => {
+// Use a valid path pattern for Express/`path-to-regexp` by matching all paths.
+// Using '/*' avoids a PathError on some platform versions.
+app.options("/*", (req, res, next) => {
   if (req.headers["access-control-request-private-network"]) {
     res.setHeader("Access-Control-Allow-Private-Network", "true");
   }
