@@ -84,14 +84,14 @@ const SuggestPage = () => {
   return (
     <div className="suggest-page">
       <button className="btn-home" onClick={() => navigate("/")}>
-        🏠 Back to Home
+        🏠 ホームに戻る
       </button>
 
       <h2 className="title-tech">
-        Shikiai <span>AI</span> CONCIERGE
+        四季彩 <span>AI</span> コンシェルジュ
       </h2>
 
-      <h1>Suggest Page</h1>
+      <h1>おすすめページ</h1>
 
       {/* CATEGORY FILTER */}
       <div className="category-bar">
@@ -112,7 +112,7 @@ const SuggestPage = () => {
       {loading && (
         <div className="loading">
           <ClipLoader size={50} />
-          <p>Loading...</p>
+          <p>読み込み中...</p>
         </div>
       )}
 
@@ -139,7 +139,7 @@ const SuggestPage = () => {
         disabled={loading}
       >
         <FontAwesomeIcon icon={faRandom} />
-        Random Pick
+        ランダムで選ぶ
       </button>
     </div>
   );
