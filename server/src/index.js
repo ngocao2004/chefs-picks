@@ -17,14 +17,30 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",           // dev local
-    "https://chefs-picks-gcrh.vercel.app" // vercel
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// Allow configuring allowed client origin(s) via environment variable `CLIENT_URL`.
+// Accept a single origin or comma-separated origins. Defaults to localhost dev URL.
+const CLIENT_URL = (process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
+// Handle Private Network preflight requests (when a public origin tries to reach
+// a private address). Most deployments shouldn't need this, but respond to
+// the browser preflight if requested.
+app.options("*", (req, res, next) => {
+  if (req.headers["access-control-request-private-network"]) {
+    res.setHeader("Access-Control-Allow-Private-Network", "true");
+  }
+  next();
+});
 
 app.use(express.json());
 
