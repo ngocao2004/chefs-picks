@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; // Thêm useEffect
-import Header from "../components/layout/Header";
+import Header from "../components/layout/header";
 import { restaurants } from "../features/lunchConcierge/data/restaurants";
 import LunchMap from "../features/lunchConcierge/components/LunchMap";
 import useLunchMapController from "../features/lunchConcierge/hooks/useLunchMapController";
