@@ -33,7 +33,7 @@ function Menu() {
   const [suggestionLoading, setSuggestionLoading] = useState(false);
   const [cuisine, setCuisine] = useState("");
   const [priceRange, setPriceRange] = useState("");
-  const [sortBy, setSortBy] = useState("popular");
+  const [sortBy, setSortBy] = useState("rating");
   const [favorites, setFavorites] = useState([]);
   const [favoriteLoading, setFavoriteLoading] = useState({}); // Track loading state per dish
 
@@ -157,54 +157,62 @@ function Menu() {
       setLoading(true);
       setError(null);
 
-      let url = `${API_BASE_URL}/dishes`;
       const params = new URLSearchParams();
+      params.append("page", page);
+      params.append("limit", itemsPerPage);
 
-      // Thêm pagination params cho endpoint chính
-      let usePagination = false;
+      // Nếu chọn cuisine -> gửi category (category._id)
+      if (cuisine) {
+        const cat = categories.find(
+          (c) => c.name === cuisine || c._id === cuisine
+        );
+        if (cat) params.append("category", cat._id || cuisine);
+      }
 
-      // Xử lý search
-      if (searchTerm.trim()) {
-        url = `${API_BASE_URL}/dishes/search`;
-        params.append("q", searchTerm);
-      }
-      // Xử lý filter by category
-      else if (cuisine) {
-        // Lấy categoryId từ tên category
-        const category = categories.find((cat) => cat.name === cuisine);
-        if (category) {
-          url = `${API_BASE_URL}/dishes/category/${category._id}`;
-        }
-      }
-      // Xử lý filter by price range
-      else if (priceRange) {
-        url = `${API_BASE_URL}/dishes/price`;
+      // Price range -> chuyển thành min/max
+      if (priceRange) {
         const ranges = {
           low: { min: 0, max: 500 },
           mid: { min: 500, max: 1000 },
-          high: { min: 1000, max: 10000 },
+          high: { min: 1000, max: 100000 },
         };
         if (ranges[priceRange]) {
           params.append("min", ranges[priceRange].min);
           params.append("max", ranges[priceRange].max);
         }
       }
-      // Xử lý popular
-      else if (sortBy === "popular") {
-        url = `${API_BASE_URL}/dishes/popular`;
-        params.append("limit", 50);
-      } else {
-        // Endpoint chính hỗ trợ pagination
-        usePagination = true;
-        params.append("page", page);
-        params.append("limit", itemsPerPage);
+
+      // Search term
+      if (searchTerm && searchTerm.trim()) {
+        params.append("q", searchTerm.trim());
       }
 
-      // Thêm params vào URL
-      if (params.toString()) {
-        url += `?${params.toString()}`;
+      // Sort mapping: đặc biệt handle 'ninkiban' -> rating
+      // frontend sortBy possible values: popular, price-low, price-high, ninkiban (requested)
+      if (sortBy) {
+        if (sortBy === "price-low") {
+          params.append("sortBy", "price");
+          params.append("sortOrder", "asc");
+        } else if (sortBy === "price-high") {
+          params.append("sortBy", "price");
+          params.append("sortOrder", "desc");
+        } else if (sortBy === "popular") {
+          params.append("sortBy", "favoriteCount");
+          params.append("sortOrder", "desc");
+        } else if (sortBy === "rating-desc") {
+          params.append("sortBy", "rating");
+          params.append("sortOrder", "desc");
+        } else if (sortBy === "rating-asc") {
+          params.append("sortBy", "rating");
+          params.append("sortOrder", "asc");
+        } else {
+          // default
+          params.append("sortBy", "createdAt");
+          params.append("sortOrder", "desc");
+        }
       }
 
+      const url = `${API_BASE_URL}/dishes?${params.toString()}`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -212,39 +220,21 @@ function Menu() {
       }
 
       const data = await response.json();
-
-      // Xử lý data tùy theo response format
       let dishes = Array.isArray(data) ? data : data.dishes || [];
 
-      // Xử lý pagination nếu có
-      if (usePagination && data.pagination) {
+      // If server returned pagination wrapper
+      if (data.pagination) {
         setCurrentPage(data.pagination.page);
         setTotalPages(data.pagination.totalPages);
         setTotalItems(data.pagination.total);
       } else {
-        // Nếu không có pagination từ server, tính toán client-side
+        // client-side pagination fallback
         const total = dishes.length;
         const totalPagesCalc = Math.ceil(total / itemsPerPage);
         setTotalPages(totalPagesCalc);
         setTotalItems(total);
-
-        // Pagination client-side
         const startIndex = (page - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        dishes = dishes.slice(startIndex, endIndex);
-      }
-
-      // Sort client-side nếu cần (chỉ khi không phải endpoint chính)
-      if (!usePagination) {
-        if (sortBy === "price-low") {
-          dishes.sort((a, b) => a.price - b.price);
-        } else if (sortBy === "price-high") {
-          dishes.sort((a, b) => b.price - a.price);
-        } else if (sortBy === "popular") {
-          dishes.sort(
-            (a, b) => (b.favoriteCount || 0) - (a.favoriteCount || 0)
-          );
-        }
+        dishes = dishes.slice(startIndex, startIndex + itemsPerPage);
       }
 
       setMenuItems(dishes);
@@ -476,9 +466,8 @@ function Menu() {
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               disabled={loading}
             >
-              <option value="popular">人気順</option>
-              <option value="price-low">価格：安い順</option>
-              <option value="price-high">価格：高い順</option>
+              <option value="rating-desc">評価：高い順</option>
+              <option value="rating-asc">評価：低い順</option>
             </select>
 
             <button
