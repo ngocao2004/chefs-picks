@@ -44,12 +44,47 @@ router.get("/", async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
-    const dishes = await Dish.find({ isAvailable: true })
-      .skip(skip)
-      .limit(limit)
-      .select("-__v");
+    // New: read filter params
+    const { category, min, max, q, sortBy, sortOrder } = req.query;
 
-    const total = await Dish.countDocuments({ isAvailable: true });
+    const filter = { isAvailable: true };
+
+    // category may be ObjectId string
+    if (category) {
+      // if looks like ObjectId, filter by restaurant/category id as given
+      // support both category id (categoryId field) or category name fallback
+      filter.categoryId = category;
+    }
+
+    if (min || max) {
+      const minVal = parseFloat(min) || 0;
+      const maxVal = parseFloat(max) || Number.MAX_SAFE_INTEGER;
+      filter.price = { $gte: minVal, $lte: maxVal };
+    }
+
+    if (q && q.toString().trim() !== "") {
+      const keyword = q.toString().trim();
+      filter.$or = [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ];
+    }
+
+    // Determine sort
+    let sort = { createdAt: -1 };
+    const order = sortOrder === "asc" ? 1 : -1;
+    if (sortBy) {
+      if (sortBy === "price") sort = { price: order };
+      else if (sortBy === "favoriteCount" || sortBy === "popular")
+        sort = { favoriteCount: order };
+      else if (sortBy === "rating") sort = { rating: order };
+      else if (sortBy === "name") sort = { name: order };
+    }
+
+    const [dishes, total] = await Promise.all([
+      Dish.find(filter).sort(sort).skip(skip).limit(limit).select("-__v"),
+      Dish.countDocuments(filter),
+    ]);
 
     res.json({
       dishes,
