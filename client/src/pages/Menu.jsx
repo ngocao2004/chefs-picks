@@ -33,7 +33,7 @@ function Menu() {
   const [suggestionLoading, setSuggestionLoading] = useState(false);
   const [cuisine, setCuisine] = useState("");
   const [priceRange, setPriceRange] = useState("");
-  const [sortBy, setSortBy] = useState("rating");
+  const [sortBy, setSortBy] = useState("none");
   const [favorites, setFavorites] = useState([]);
   const [favoriteLoading, setFavoriteLoading] = useState({}); // Track loading state per dish
 
@@ -91,6 +91,11 @@ function Menu() {
     };
 
     loadFavorites();
+  }, []);
+
+  // Set page/tab title
+  useEffect(() => {
+    document.title = "Chef's Recommendation Menu";
   }, []);
 
   // Fetch dishes khi component mount hoặc filters thay đổi
@@ -187,9 +192,9 @@ function Menu() {
         params.append("q", searchTerm.trim());
       }
 
-      // Sort mapping: đặc biệt handle 'ninkiban' -> rating
-      // frontend sortBy possible values: popular, price-low, price-high, ninkiban (requested)
-      if (sortBy) {
+      // Sort mapping: handle various frontend sort options.
+      // If sortBy === 'none' we intentionally skip adding sort params.
+      if (sortBy && sortBy !== "none") {
         if (sortBy === "price-low") {
           params.append("sortBy", "price");
           params.append("sortOrder", "asc");
@@ -332,7 +337,7 @@ function Menu() {
     setSearchTerm("");
     setCuisine("");
     setPriceRange("");
-    setSortBy("popular");
+    setSortBy("none");
     setCurrentPage(1);
   };
 
@@ -466,6 +471,7 @@ function Menu() {
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               disabled={loading}
             >
+              <option value="none">ソートなし</option>
               <option value="rating-desc">評価：高い順</option>
               <option value="rating-asc">評価：低い順</option>
             </select>
